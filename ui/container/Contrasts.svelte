@@ -38,7 +38,8 @@
   $: contrasts = tonalPalettes.map((tonal) => toThreeContrast(tonal))
 </script>
 
-<Input bind:value={toContrastTone} style={{ 'padding-bottom': '10px' }} />
+<Input bind:value={toContrastTone} />
+
 <div style:display="grid" style:grid-template-columns={`repeat(${3}, 1fr`}>
   {#each contrasts as labs, i (i)}
     {#each labs as hex, j (j)}

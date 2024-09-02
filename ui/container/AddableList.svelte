@@ -21,7 +21,7 @@
   <Input bind:value style={{ 'padding-bottom': '10px' }} />
   <Button text="追加" on:click={add} style={{ 'margin-top': '8px' }} />
 
-  <ChipSet style={{ 'padding-bottom': '10px' }} >
+  <ChipSet style={{ 'padding-bottom': '10px' }}>
     {#each hexes as hex (hex)}
       <ChipWithColor text={hex.toUpperCase()} on:remove={() => remove(hex)} />
     {/each}
