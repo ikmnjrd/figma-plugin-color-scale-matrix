@@ -2,6 +2,7 @@
   "name": "figma-plugin-color-scale-matrix",
   "version": "0.0.0",
   "description": "Figma Plugin",
+  "type": "module",
   "scripts": {
     "clean": "rimraf ./dist",
     "prebuild": "npm-run-all -p clean typecheck",
@@ -52,5 +53,9 @@
     "vite": "^5.4.1",
     "vite-plugin-singlefile": "^2.0.2",
     "vite-plugin-svgr": "^4.2.0"
+  },
+  "dependencies": {
+    "@material/material-color-utilities": "^0.3.0",
+    "@material/web": "^2.1.0"
   }
 }

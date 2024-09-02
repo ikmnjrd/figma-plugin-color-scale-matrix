@@ -6,8 +6,8 @@ if (figma.command == 'plugin-command-with-ui') {
   // Present a UI, providing it with Figma CSS color variables
   figma.showUI(__html__, {
     themeColors: true,
-    width: 300,
-    height: 62,
+    width: 500,
+    height: 500,
   })
 
   // Create a variable to store the rectangles that will be created

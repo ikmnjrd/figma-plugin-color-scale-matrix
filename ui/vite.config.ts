@@ -4,7 +4,7 @@ import { defineConfig } from 'vite'
 import { viteSingleFile } from 'vite-plugin-singlefile'
 import svgr from 'vite-plugin-svgr'
 
-/* 
+/*
 Define a config for building the plugin UI. Figma requires a single HTML file as an output, so we need to inline every asset and merge everything into a single document.
  */
 export default defineConfig({
