@@ -6,7 +6,7 @@ if (figma.command == 'plugin-command-with-ui') {
   // Present a UI, providing it with Figma CSS color variables
   figma.showUI(__html__, {
     themeColors: true,
-    width: 500,
+    width: 1000,
     height: 500,
   })
 

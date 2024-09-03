@@ -1,14 +1,14 @@
 <script lang="ts">
-  import AddableList from './container/AddableList.svelte'
+  // import AddableList from './container/AddableList.svelte'
   // import ColorTable from './container/ColorTable.svelte'
-  import Contrasts from './container/Contrasts.svelte'
-
-  $: hexes = ['#E8A041', '#9400d3', '#00ffff', '#800000', '#2f4f4f', '#ff0000', '#fffaf0', '#00ff00']
+  // import Contrasts from './container/Contrasts.svelte'
+  import ColorContrastTable from './container/ColorContrastTable.svelte'
 </script>
 
 <div style:height="500px">
-  <AddableList bind:hexes />
-  <Contrasts bind:hexes />
+  <ColorContrastTable />
+  <!-- <AddableList bind:hexes /> -->
+  <!-- <Contrasts bind:hexes /> -->
   <!-- <ColorTable bind:hexes /> -->
 </div>
 
