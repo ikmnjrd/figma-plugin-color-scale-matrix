@@ -7,7 +7,7 @@ if (figma.command == 'plugin-command-with-ui') {
   figma.showUI(__html__, {
     themeColors: true,
     width: 1000,
-    height: 500,
+    height: 800,
   })
 
   // Create a variable to store the rectangles that will be created

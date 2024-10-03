@@ -1,7 +1,9 @@
 <script lang="ts">
   import { argbFromHex, Contrast, Hct, hexFromArgb, TonalPalette } from '@material/material-color-utilities'
 
-  import Input from '../components/web-component-wrapper/Input.svelte'
+  import Input from '../components/Input.svelte'
+  import { plotArrayOnCanvas } from '../lib/canvas'
+  import { toExpArray, toLinerArray, toLogArray, to1p5Array } from '../lib/genArray'
 
   // 本機能の下敷き: https://note.com/yotsukura/n/n89997b613d2f
 
@@ -27,26 +29,23 @@
     })
   }
 
-  function generateArrayWithSpecifiedVariance(mean: number, variance: number, size: number): number[] {
-    const stdDev = Math.sqrt(variance) // 分散から標準偏差を計算
-    const result = []
+  const functionNames = [
+    to1p5Array.name,
+    toLogArray.name,
+    toLinerArray.name,
+    toExpArray.name,
+  ]
 
-    // 配列の各要素を生成
-    for (let i = 0; i < size; i++) {
-      // 正規分布に基づいて等間隔に値を配置
-      let value = mean + stdDev * ((i - (size - 1) / 2) / (size / 2))
-      value = Math.min(Math.max(value, 0), 100) // 0から100の範囲に収める
-      result.push(value)
-    }
-
-    return result
+  const functions = {
+    [to1p5Array.name]: to1p5Array,
+    [toLogArray.name]: toLogArray,
+    [toLinerArray.name]: toLinerArray,
+    [toExpArray.name]: toExpArray,
   }
 
-  // 使用例
-  const variance = 50 * 50 // 分散 (標準偏差15の2乗)
-  const size = 20 // 要素数
+  $: normalDistArray = functions[expType](tonalPalette.keyColor.tone)
 
-  $: normalDistArray = generateArrayWithSpecifiedVariance(tonalPalette.keyColor.tone, variance, size).reverse()
+  $: expType = functionNames.at(0) as string
 
   const CONTRAST_LABEL = Object.freeze({
     AAA: 'AAA',
@@ -83,7 +82,7 @@
     const closest = findClosestNumber(normalDistArray, tonal.keyColor.tone)
     const diff = closest - tonal.keyColor.tone
 
-    const argbMap = new Set(
+    const toneMap = new Set(
       normalDistArray.map((num) => {
         if (num === closest) {
           return tonal.keyColor.tone
@@ -95,15 +94,17 @@
       }),
     )
 
-    const ret = {} as Table
+    plotArrayOnCanvas(canvas, [...toneMap])
 
-    for (const i of argbMap) {
+    const ret: Table = {}
+
+    for (const i of toneMap) {
       const iArgb = tonal.tone(i)
       const iHex = hexFromArgb(iArgb)
 
       ret[iHex] = []
 
-      for (const j of argbMap) {
+      for (const j of toneMap) {
         const jArgb = tonal.tone(j)
         const jHex = hexFromArgb(jArgb)
         const contrastRatio = Contrast.ratioOfTones(i, j)
@@ -123,6 +124,8 @@
 
   $: table = toTable(tonalPalette)
 
+  let canvas: HTMLCanvasElement | null = null
+
   function getContrastYIQ(hex: string): string {
     // HEXコードをRGB値に変換
     const r = parseInt(hex.slice(1, 3), 16)
@@ -137,12 +140,21 @@
   }
 </script>
 
-<Input bind:value={hex} />
+<Input bind:value={hex} label="カラーコード" />
+<label>
+  <span>生成オプション</span>
+  <select bind:value={expType}>
+    {#each functionNames as funcName (funcName)}
+      <option value={funcName}>{funcName}</option>
+    {/each}
+  </select>
+</label>
 
 <div
   style:display="grid"
   style:grid-template-columns={`repeat(${Object.keys(table).length + 1}, 1fr`}
   style:font-size="0.8rem"
+  style:margin-top="10px"
 >
   <div style:width="50px">bg\text</div>
   {#each Object.entries(table) as [text], i (i)}
@@ -167,3 +179,6 @@
     {/each}
   {/each}
 </div>
+
+
+<canvas bind:this={canvas} width={900} height={300} />
